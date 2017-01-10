@@ -109,6 +109,19 @@ public void doEdit(int pos){
         }
 @Override
 public void doDelete(int pos){
+        itemPos=pos;
+final Hotel hotel=mList.get(pos);
+        mList.remove(itemPos);
+        mAdapter.notifyDataSetChanged();
+
+        Snackbar.make(findViewById(R.id.fab),hotel.judul+" Terhapus",Snackbar.LENGTH_LONG).setAction("UNDO",new View.OnClickListener(){
+@Override
+public void onClick(View v){
+        mList.add(itemPos,hotel);
+        mAdapter.notifyDataSetChanged();
+        }
+        })
+        .show();
         }
 @Override
 public void doFav(int pos){
