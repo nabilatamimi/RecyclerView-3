@@ -25,6 +25,18 @@ public class InputActivity extends AppCompatActivity {
     Uri uriFoto;
     Hotel hotel;
 
+    {
+        setTitle("Edit" + hotel.judul);
+        fillData();
+    }
+
+    {
+        setTitle("New Hotel");
+    }
+
+    getIntent()
+
+    getSerializableExtra(id.sch.smktelkom_mlg.learn.recyclerview3.MainActivity.HOTEL);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +68,7 @@ public class InputActivity extends AppCompatActivity {
 
     }
 
-
+    hotel=(Hotel)
     private void pickPhoto() {
         Intent intent;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -70,6 +82,7 @@ public class InputActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_IMAGE_GET);
     }
 
+    .
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -79,6 +92,7 @@ public class InputActivity extends AppCompatActivity {
         }
     }
 
+    if(hotel!=null)
     private void doSave() {
         String judul = etJudul.getText().toString();
         String deskripsi = etDeskripsi.getText().toString();
@@ -98,6 +112,7 @@ public class InputActivity extends AppCompatActivity {
 
     }
 
+    else
     private boolean isValid(String judul, String deskripsi, String detail,
                             String lokasi, Uri uriFoto) {
         boolean valid = true;
@@ -124,6 +139,17 @@ public class InputActivity extends AppCompatActivity {
         return valid;
 
     }
+
+}
+
+    private void fillData() {
+
+        etJudul.setText(hotel.judul);
+        etDeskripsi.setText(hotel.deskripsi);
+        etDetail.setText(hotel.detail);
+        etLokasi.setText(hotel.lokasi);
+        uriFoto = Uri.parse(hotel.foto);
+        ivFoto.setImageURI(uriFoto);
 
     public void setErrorEmpty(EditText editText) {
         editText.setError(((TextInputLayout) editText.getParent().getParent()).getHint() + "Belum Diisi");

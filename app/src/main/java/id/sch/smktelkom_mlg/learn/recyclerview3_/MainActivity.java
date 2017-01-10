@@ -1,16 +1,6 @@
 package id.sch.smktelkom_mlg.learn.recyclerview3;
 
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import java.util.ArrayList;
 
@@ -24,8 +14,19 @@ public class MainActivity extends AppCompatActivity implements HotelAdapter.IHot
     public static final int REQUEST_CODE_ADD = 88;
     public static final int REQUEST_CODE_EDIT = 99;
 
+    int itemPos;
+
     ArrayList<Hotel> mList = new ArrayList<>();
     HotelAdapter mAdapter;
+
+    mList.add(hotel)
+    mAdapter.notifyDataSetChanged()
+
+}else if(requestCode==REQUEST_CODE_EDIT&&resultCode==RESULT_OK){
+        Hotel hotel=(Hotel)data.getSerializableExtra(HOTEL);
+        mList.remove(itemPos);
+        mList.add(itemPos,hotel);
+        mAdapter.notifyDataSetChanged();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,24 @@ public class MainActivity extends AppCompatActivity implements HotelAdapter.IHot
     }
 
 }
+
+@Override
+public void doEdit(int pos){
+        itemPos=pos;
+        Intent intent=new Intent(this,InputActivity.class);
+        intent.putExtra(HOTEL,mList.get(pos));
+        startActivityForResult(intent,REQUEST_CODE_EDIT);
+        }
+@Override
+public void doDelete(int pos){
+        }
+@Override
+public void doFav(int pos){
+        }
+
+@Override
+public void doShare(int pos){
+        }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
