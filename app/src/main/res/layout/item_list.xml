@@ -12,11 +12,10 @@
     android:foreground="?attr/selectableItemBackground">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -33,7 +32,7 @@
             android:textColor="@android:color/white"
             tools:text="Judul" />
 
-        <TextView
+        <ImageButton
             android:id="@+id/textViewDeskripsi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
