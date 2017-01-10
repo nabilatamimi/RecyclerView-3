@@ -18,6 +18,10 @@ public class MainActivity extends AppCompatActivity implements HotelAdapter.IHot
 
     ArrayList<Hotel> mList = new ArrayList<>();
     HotelAdapter mAdapter;
+    ArrayList<Hotel> mListAll = new ArrayList<>();
+    boolean isFiltered;
+    ArrayList<Integer> mListMapFilter = new ArrayList<>();
+    String mQuery;
 
     mList.add(hotel)
     mAdapter.notifyDataSetChanged()
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements HotelAdapter.IHot
 }else if(requestCode==REQUEST_CODE_EDIT&&resultCode==RESULT_OK){
         Hotel hotel=(Hotel)data.getSerializableExtra(HOTEL);
         mList.remove(itemPos);
+        if(isFiltered)mListAll.remove(mListMapFilter.get(itemPos).intValue());
         mList.add(itemPos,hotel);
         mAdapter.notifyDataSetChanged();
 
@@ -63,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements HotelAdapter.IHot
         if (requestCode == REQUEST_CODE_ADD && resultCode == RESULT_OK) {
             Hotel hotel = (Hotel) data.getSerializableExtra(HOTEL);
             mList.add(hotel);
-            mAdapter.notifyDataSetChanged();
+        if(isFiltered)mListAll.add(hotel);
+        doFilter(mQuery);
         }
     }
 
@@ -112,13 +118,17 @@ public void doDelete(int pos){
         itemPos=pos;
 final Hotel hotel=mList.get(pos);
         mList.remove(itemPos);
+        if(isFiltered)mListAll.remove(mListMapFilter.get(itemPos).intValue());
+        mList.add(itemPos,hotel);
+        if(isFiltered)mListAll.add(mListMapFilter.get(itemPos),hotel);
         mAdapter.notifyDataSetChanged();
 
         Snackbar.make(findViewById(R.id.fab),hotel.judul+" Terhapus",Snackbar.LENGTH_LONG).setAction("UNDO",new View.OnClickListener(){
 @Override
 public void onClick(View v){
         mList.add(itemPos,hotel);
-        mAdapter.notifyDataSetChanged();
+        if(isFiltered)mListAll.add(hotel);
+        doFilter(mQuery);
         }
         })
         .show();
@@ -135,8 +145,52 @@ public void doShare(int pos){
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem searchItem=menu.findItem(R.id.action_search);
+        SearchView searchView=(SearchView)
+        MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(
+        new SearchView.OnQueryTextListener(){
+@Override
+public boolean onQueryTextSubmit(String query){
+        return false;
+        }
+@Override
+public boolean onQueryTextChange(String newText){
+        mQuery=newText.toLowerCase();
+        doFilter(mQuery);
+        return true;
+        }
+        });
         return true;
     }
+
+private void doFilter(String mQuery){
+        if(!isFiltered){
+        mListAll.clear();
+        mListAll.addAll(mList);
+        isFiltered=true;
+
+        }
+        mList.clear();
+        if(mQuery==null||mQuery.isEmpty()){
+        mList.addAll(mListAll);
+        isFiltered=false;
+        }else{
+        mListMapFilter.clear();
+        for(int i=0;i<mListAll.size();i++){
+        Hotel hotel=mListAll.get(i);
+        if(hotel.judul.toLowerCase().contains(mQuery)||
+        hotel.deskripsi.toLowerCase().contains(mQuery)||
+        hotel.lokasi.toLowerCase().contains(mQuery)){
+        mList.add(hotel);
+        if(isFiltered)mListAll.add(mListMapFilter.get(itemPos),hotel);
+        mListMapFilter.add(i);
+        }
+        }
+        }
+        mAdapter.notifyDataSetChanged();
+        }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
